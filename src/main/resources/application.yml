@@ -1,0 +1,11 @@
+server:
+  servlet:
+    context-path: /demo
+  port: 8089
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/split?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456

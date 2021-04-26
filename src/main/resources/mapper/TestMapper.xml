@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gaorongyi.split.mapper.TestMapper">
+    <sql id="insert_body">
+        (id, name, create_time) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.name},#{item.createTime})
+        </foreach>
+    </sql>
+
+    <sql id="nextVal">
+        SELECT nextval('test_seq') from dual
+    </sql>
+
+    <select id="selectNextVal" resultType="java.lang.Long">
+        <include refid="nextVal"/>
+    </select>
+
+    <insert id="insertOne" parameterType="cn.gaorongyi.split.entity.Test">
+        <selectKey resultType="long" order="BEFORE" keyProperty="id">
+            <include refid="nextVal"/>
+        </selectKey>
+        insert into test(id, name, create_time) values (#{id},#{name},#{createTime})
+    </insert>
+
+    <insert id="batchInsert0">
+        insert into test_0<include refid="insert_body"/>
+    </insert>
+    <insert id="batchInsert1">
+        insert into test_1<include refid="insert_body"/>
+    </insert>
+    <insert id="batchInsert2">
+        insert into test_2<include refid="insert_body"/>
+    </insert>
+    <insert id="batchInsert3">
+        insert into test_3<include refid="insert_body"/>
+    </insert>
+    <insert id="batchInsert4">
+        insert into test_4<include refid="insert_body"/>
+    </insert>
+    <insert id="batchInsert5">
+        insert into test_5<include refid="insert_body"/>
+    </insert>
+    <insert id="batchInsert6">
+        insert into test_6<include refid="insert_body"/>
+    </insert>
+    <insert id="batchInsert7">
+        insert into test_7<include refid="insert_body"/>
+    </insert>
+    <insert id="batchInsert8">
+        insert into test_8<include refid="insert_body"/>
+    </insert>
+    <insert id="batchInsert9">
+        insert into test_9<include refid="insert_body"/>
+    </insert>
+</mapper>
