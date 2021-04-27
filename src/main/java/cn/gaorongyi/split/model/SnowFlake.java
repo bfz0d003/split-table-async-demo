@@ -2,6 +2,9 @@ package cn.gaorongyi.split.model;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * 雪花算法ID自增，注册为dubbo服务或分节点ID（分节点性能好于dubbo服务），高并发事务适用
+ */
 @Component
 public class SnowFlake {
 

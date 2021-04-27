@@ -22,9 +22,6 @@ import java.util.Random;
 public class TestController {
     @Resource
     private ITestService testService;
-    /**
-     * 雪花算法ID自增，注册为dubbo服务或分节点ID，高并发事务适用
-     */
     @Resource
     private SnowFlake snowFlake;
 
