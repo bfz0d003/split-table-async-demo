@@ -27,9 +27,9 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test> implements IT
 
     @Override
     public List<Test> pageList(int pageSize) {
-        CountDownLatch countDownLatch = new CountDownLatch(10);
         List<Test> resultList = Collections.synchronizedList(new ArrayList<>());
         int count = testMapper.selectSplitTableNames().size();
+        CountDownLatch countDownLatch = new CountDownLatch(count);
         for (int i = 0; i < count; i++) {
             testModel.list(i, pageSize, countDownLatch, resultList);
         }
