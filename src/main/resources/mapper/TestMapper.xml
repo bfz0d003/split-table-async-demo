@@ -23,17 +23,25 @@
         insert into test(id, name, create_time) values (#{id},#{name},#{createTime})
     </insert>
 
+    <insert id="batchInsert">
+        insert into test_${index}
+        <include refid="insert_body"/>
+    </insert>
     <insert id="batchInsert0">
-        insert into test_0<include refid="insert_body"/>
+        insert into test_0
+        <include refid="insert_body"/>
     </insert>
     <insert id="batchInsert1">
-        insert into test_1<include refid="insert_body"/>
+        insert into test_1
+        <include refid="insert_body"/>
     </insert>
     <insert id="batchInsert2">
-        insert into test_2<include refid="insert_body"/>
+        insert into test_2
+        <include refid="insert_body"/>
     </insert>
     <insert id="batchInsert3">
-        insert into test_3<include refid="insert_body"/>
+        insert into test_3
+        <include refid="insert_body"/>
     </insert>
     <insert id="batchInsert4">
         insert into test_4<include refid="insert_body"/>

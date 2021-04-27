@@ -2,28 +2,34 @@ package cn.gaorongyi.split.service.impl;
 
 import cn.gaorongyi.split.entity.Test;
 import cn.gaorongyi.split.mapper.TestMapper;
+import cn.gaorongyi.split.model.RollBack;
 import cn.gaorongyi.split.model.TestModel;
 import cn.gaorongyi.split.service.ITestService;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 /**
  * @author gaorongyi
  */
+@Log4j2
 @Service
 public class TestServiceImpl extends ServiceImpl<TestMapper, Test> implements ITestService {
     @Resource
     private TestModel testModel;
     @Resource
     private TestMapper testMapper;
+    @Resource
+    private PlatformTransactionManager transactionManager;
 
     @Override
     public long selectNextVal() {
@@ -36,10 +42,11 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test> implements IT
     }
 
     @Override
-    public void batchInsert(List<Test> testList) {
+    public boolean batchInsert(List<Test> testList) {
         Map<Integer, List<Test>> map = new HashMap<>(15);
+        Map<Integer, Boolean> flagMap = new ConcurrentHashMap<>(15);
         for (Test test : testList) {
-            switch (test.getName().substring(test.getName().length()-1)) {
+            switch (test.getName().substring(test.getName().length() - 1)) {
                 case "0":
                     if (!map.containsKey(0)) {
                         map.put(0, new ArrayList<>());
@@ -105,15 +112,28 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test> implements IT
             }
         }
         CountDownLatch countDownLatch = new CountDownLatch(map.size());
+        CountDownLatch mainLatch = new CountDownLatch(map.size());
+        log.info("# countDown SIZE: " + map.size());
+        RollBack rollBack = new RollBack(false);
         for (Map.Entry<Integer, List<Test>> entry : map.entrySet()) {
-            testModel.batchInsertAsync(entry.getValue(), entry.getKey(), countDownLatch);
+            testModel.batchInsertAsync(entry.getValue(), entry.getKey(), countDownLatch, mainLatch, rollBack, flagMap);
         }
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
-            System.out.println("# ROLLBACK !!!");
+            log.info("# ROLLBACK !!!");
             e.printStackTrace();
         }
-        System.out.println("# BATCH INSERT SUCCESS");
+        boolean flag = true;
+        for (Map.Entry<Integer, Boolean> entry : flagMap.entrySet()) {
+            if (!entry.getValue()) {
+                log.info("# BATCH INSERT FAILED, INDEX: " + entry.getKey());
+                rollBack.setRollBack(true);
+                flag = false;
+            }
+            mainLatch.countDown();
+        }
+        log.info("# BATCH INSERT SUCCESS");
+        return flag;
     }
 }
