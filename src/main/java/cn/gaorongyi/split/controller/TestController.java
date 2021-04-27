@@ -45,7 +45,7 @@ public class TestController {
             testList.add(test);
         }
         if (testService.batchInsert(testList)) {
-            return testList;
+            return testList.size();
         }
         return false;
     }
