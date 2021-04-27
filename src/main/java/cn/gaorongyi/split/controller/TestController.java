@@ -22,14 +22,17 @@ import java.util.Random;
 public class TestController {
     @Resource
     private ITestService testService;
+    /**
+     * 雪花算法ID自增，注册为dubbo服务或分节点ID，高并发事务适用
+     */
     @Resource
     private SnowFlake snowFlake;
 
     /**
-     * 雪花算法ID自增，注册为dubbo服务，高并发事务适用
+     * 批量插入
      *
      * @param count 模拟数据数量
-     * @return
+     * @return Object
      */
     @RequestMapping("/testBatchSnowFlake")
     public Object testBatchSnowFlake(int count) {
@@ -48,5 +51,16 @@ public class TestController {
             return testList;
         }
         return false;
+    }
+
+    /**
+     * 模拟分页
+     *
+     * @param pageSize 模拟数据数量
+     * @return Object
+     */
+    @RequestMapping("/testPage")
+    public Object testPage(int pageSize) {
+        return testService.pageList(pageSize);
     }
 }

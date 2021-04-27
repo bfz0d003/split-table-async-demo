@@ -10,10 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
@@ -24,7 +21,26 @@ import java.util.concurrent.CountDownLatch;
 @Service
 public class TestServiceImpl extends ServiceImpl<TestMapper, Test> implements ITestService {
     @Resource
+    private TestMapper testMapper;
+    @Resource
     private TestModel testModel;
+
+    @Override
+    public List<Test> pageList(int pageSize) {
+        CountDownLatch countDownLatch = new CountDownLatch(10);
+        List<Test> resultList = Collections.synchronizedList(new ArrayList<>());
+        int count = testMapper.selectSplitTableNames().size();
+        for (int i = 0; i < count; i++) {
+            testModel.list(i, pageSize, countDownLatch, resultList);
+        }
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Collections.sort(resultList);
+        return resultList.size() < pageSize ? resultList : resultList.subList(0, pageSize);
+    }
 
     @Override
     public boolean batchInsert(List<Test> testList) {

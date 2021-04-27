@@ -17,7 +17,7 @@ import java.util.Date;
 @EqualsAndHashCode
 @TableName("test")
 @ToString
-public class Test implements Serializable {
+public class Test implements Serializable, Comparable<Test> {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,4 +27,15 @@ public class Test implements Serializable {
     private String name;
 
     private Date createTime;
+
+    @Override
+    public int compareTo(Test o) {
+        if (this.id.equals(o.id)) {
+            return 0;
+        } else if (this.id > o.id) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 }

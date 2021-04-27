@@ -24,15 +24,21 @@ public class TestModel {
     private TestMapper testMapper;
 
     @Async
+    public void list(int index, int pageSize, CountDownLatch countDownLatch, List<Test> resultList) {
+        resultList.addAll(testMapper.list(index, pageSize));
+        countDownLatch.countDown();
+    }
+
+    @Async
     @Transactional(rollbackFor = Exception.class)
     public void batchInsertAsync(List<Test> testList, int index, CountDownLatch countDownLatch, CountDownLatch mainLatch, RollBack rollBack, Map<Integer, Boolean> flagMap) {
         try {
             testMapper.batchInsert(testList, index);
             log.info("# " + index + ": " + JSON.toJSON(testList));
             // TODO: 2021/4/27 子线程异常测试代码
-            if (index == 9) {
-                throw new RuntimeException("TEST ROLLBACK");
-            }
+//            if (index == 9) {
+//                throw new RuntimeException("TEST ROLLBACK");
+//            }
             flagMap.put(index, true);
         } catch (Exception e) {
             flagMap.put(index, false);

@@ -10,6 +10,9 @@ import java.util.List;
  * @author gaorongyi
  */
 public interface ITestService extends IService<Test> {
+
+    List<Test> pageList(int pageSize);
+
     @Transactional
     boolean batchInsert(List<Test> testList);
 }

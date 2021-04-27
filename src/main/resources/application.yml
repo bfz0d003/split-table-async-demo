@@ -13,3 +13,9 @@ spring:
       initial-size: 10
       min-idle: 10
       max-active: 80
+
+logging:
+  level:
+    root: WARN
+    cn:
+      gaorongyi: DEBUG

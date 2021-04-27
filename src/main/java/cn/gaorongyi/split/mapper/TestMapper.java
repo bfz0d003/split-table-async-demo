@@ -10,5 +10,9 @@ import java.util.List;
  * @author gaorongyi
  */
 public interface TestMapper extends BaseMapper<Test> {
+    List<String> selectSplitTableNames();
+
+    List<Test> list(@Param("index") int index, @Param("pageSize") int pageSize);
+
     void batchInsert(@Param("list") List<Test> list, @Param("index") int index);
 }
