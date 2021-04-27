@@ -10,9 +10,5 @@ import java.util.List;
  * @author gaorongyi
  */
 public interface TestMapper extends BaseMapper<Test> {
-    long selectNextVal();
-
-    void insertOne(Test test);
-
     void batchInsert(@Param("list") List<Test> list, @Param("index") int index);
 }

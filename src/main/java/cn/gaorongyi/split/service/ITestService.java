@@ -10,10 +10,6 @@ import java.util.List;
  * @author gaorongyi
  */
 public interface ITestService extends IService<Test> {
-    long selectNextVal();
-
-    void insertOne(Test test);
-
     @Transactional
     boolean batchInsert(List<Test> testList);
 }

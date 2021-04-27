@@ -8,21 +8,6 @@
         </foreach>
     </sql>
 
-    <sql id="nextVal">
-        SELECT nextval('test_seq') from dual
-    </sql>
-
-    <select id="selectNextVal" resultType="java.lang.Long">
-        <include refid="nextVal"/>
-    </select>
-
-    <insert id="insertOne" parameterType="cn.gaorongyi.split.entity.Test">
-        <selectKey resultType="long" order="BEFORE" keyProperty="id">
-            <include refid="nextVal"/>
-        </selectKey>
-        insert into test(id, name, create_time) values (#{id},#{name},#{createTime})
-    </insert>
-
     <insert id="batchInsert">
         insert into test_${index}
         <include refid="insert_body"/>

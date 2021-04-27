@@ -25,39 +25,6 @@ public class TestController {
     @Resource
     private SnowFlake snowFlake;
 
-    @RequestMapping("/test")
-    public Object test() {
-        Test test = new Test();
-        test.setCreateTime(new Date());
-        String name = String.valueOf(new Random().nextInt(10000));
-        test.setName(name);
-        testService.insertOne(test);
-        return test;
-    }
-
-    /**
-     * 序列实现ID自增，高并发事务不适用
-     *
-     * @param count 模拟数据数量
-     * @return
-     */
-    @RequestMapping("/testBatch")
-    public Object testBatch(int count) {
-        String name;
-        List<Test> testList = new ArrayList<>();
-        Test test;
-        for (int i = 0; i < count; i++) {
-            test = new Test();
-            test.setId(testService.selectNextVal());
-            test.setCreateTime(new Date());
-            name = String.valueOf(new Random().nextInt(10000));
-            test.setName(name);
-            testList.add(test);
-        }
-        testService.batchInsert(testList);
-        return testList;
-    }
-
     /**
      * 雪花算法ID自增，注册为dubbo服务，高并发事务适用
      *

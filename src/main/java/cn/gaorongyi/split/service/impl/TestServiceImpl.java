@@ -8,7 +8,6 @@ import cn.gaorongyi.split.service.ITestService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -26,20 +25,6 @@ import java.util.concurrent.CountDownLatch;
 public class TestServiceImpl extends ServiceImpl<TestMapper, Test> implements ITestService {
     @Resource
     private TestModel testModel;
-    @Resource
-    private TestMapper testMapper;
-    @Resource
-    private PlatformTransactionManager transactionManager;
-
-    @Override
-    public long selectNextVal() {
-        return testMapper.selectNextVal();
-    }
-
-    @Override
-    public void insertOne(Test test) {
-        testMapper.insertOne(test);
-    }
 
     @Override
     public boolean batchInsert(List<Test> testList) {
