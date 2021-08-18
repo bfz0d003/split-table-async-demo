@@ -74,20 +74,24 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.6</version>
+            <exclusions> 
+                <exclusion> 
+                    <groupId>com.alibaba</groupId> 
+                    <artifactId>jconsole</artifactId> 
+                    <version>1.8.0</version> 
+                </exclusion> 
+                <exclusion> 
+                    <groupId>com.alibaba</groupId> 
+                    <artifactId>tools</artifactId> 
+                    <version>1.8.0</version> 
+                </exclusion> 
+            </exclusions> 
         </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.76</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.sun</groupId>
-            <artifactId>tools</artifactId>
-            <version>1.8.0_301</version>
-            <scope>system</scope>
-            <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
