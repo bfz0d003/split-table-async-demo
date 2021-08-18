@@ -81,10 +81,11 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.76</version>
         </dependency>
-            <dependency>
+        
+        <dependency>
             <groupId>com.sun</groupId>
             <artifactId>tools</artifactId>
-            <version>1.8.0</version>
+            <version>1.8.0_301</version>
             <scope>system</scope>
             <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
         </dependency>
